@@ -6,15 +6,16 @@ public class Ring : MonoBehaviour
 {
     [SerializeField] Transform _ball;
 
-    private void Awake()
-    {
-    }
+   
+
     private void Update()
     {
-        if(transform.position.y >= _ball.position.y)
+        if(transform.position.y > _ball.position.y + 1)
         {
             Destroy(gameObject);
             GameManager.Instance.AddScore(1);
         }
     }
+
+   
 }

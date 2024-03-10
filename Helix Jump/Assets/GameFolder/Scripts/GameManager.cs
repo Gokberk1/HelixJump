@@ -7,21 +7,44 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : SingletonThisObject<GameManager>
 {
-    private int _score;
-    [SerializeField] TextMeshProUGUI _scoreText;
+    public int _score = 0;
+    public event System.Action OnGameStop;
 
     private void Awake()
     {
         SingletonIt(this);
     }
 
+    public void StopGame()
+    {
+        Time.timeScale = 0f;
+
+        if (OnGameStop != null)
+        {
+            OnGameStop();
+        }
+        OnGameStop?.Invoke();
+    }
+
     public void AddScore(int ringScore)
     {
         _score += ringScore;
-        _scoreText.text = _score.ToString();
     }
-    public void RestartGame()
+
+    public void RestartGame(string sceenName)
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(sceenName);
+        _score = 0;
+        Time.timeScale = 1;
+    }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("Menu");
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
     }
 }
